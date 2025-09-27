@@ -6,12 +6,11 @@ return {
     "neovim/nvim-lspconfig",
     config = function()
       local nvlsp = require "nvchad.configs.lspconfig"
-      local lspconfig = require "lspconfig"
 
-      lspconfig.pyright.setup {
+      vim.lsp.config("pyright", {
         on_attach = nvlsp.on_attach,
         capabilities = nvlsp.capabilities,
-      }
+      })
     end,
   },
 
