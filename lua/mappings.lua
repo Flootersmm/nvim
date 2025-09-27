@@ -1,11 +1,10 @@
 require "nvchad.mappings"
 
--- add yours here
-
 local map = vim.keymap.set
 
+-- map(mode, key_seq, command, opts_list)
+
 map("n", ";", ":", { desc = "CMD enter command mode" })
--- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
 map("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show diagnostics in float" })
 map("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
 map("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
@@ -15,6 +14,8 @@ map("v", "p", '"_dP', { desc = "Paste without yanking replaced text" })
 map("v", ">", ">gv", { desc = "Indent and keep selection" })
 map("v", "<", "<gv", { desc = "Unindent and keep selection" })
 
+-- Load these only if nvim-dap is loaded
+-- nvim-dap is attached only to particular buffer types, like .c
 vim.api.nvim_create_autocmd("User", {
   pattern = "LazyLoad",
   callback = function(event)
