@@ -1,0 +1,11 @@
+local nj = require "nvim-java"
+
+-- Java is an absolute mess
+nj.setup {
+  cmd = { "java-language-server" },
+  root_dir = require("lspconfig.util").root_pattern("pom.xml", "gradle.build", ".git"),
+  capabilities = require("nvchad.configs.lspconfig").capabilities,
+  on_attach = function(client, bufnr)
+    require("nvchad.configs.lspconfig").on_attach(client, bufnr)
+  end,
+}
