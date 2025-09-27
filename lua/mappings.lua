@@ -14,8 +14,49 @@ map("v", "p", '"_dP', { desc = "Paste without yanking replaced text" })
 map("v", ">", ">gv", { desc = "Indent and keep selection" })
 map("v", "<", "<gv", { desc = "Unindent and keep selection" })
 
+-- Load these only if in a c/cpp file
+--   Jump to impl and jump to decl
+-- C/C++ specific mappings for clangd
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "c", "cpp" },
+  callback = function()
+    local clients = vim.lsp.get_clients { bufnr = bufnr }
+    for _, client in ipairs(clients) do
+      if client.name == "clangd" then
+        local opts = { noremap = true, silent = true }
+
+        -- Jump to header (.h/.hpp)
+        map("n", "gd", function()
+          vim.lsp.buf.declaration()
+        end, vim.tbl_extend("force", opts, { desc = "Go to function declaration (header)" }))
+
+        -- Jump to implementation (.c/.cpp), skipping headers if possible
+        map("n", "gD", function()
+          local params = vim.lsp.util.make_position_params()
+          vim.lsp.buf_request(0, "textDocument/definition", params, function(err, result)
+            if err or not result or vim.tbl_isempty(result) then
+              return
+            end
+            -- try to jump to a non-header file first
+            for _, res in ipairs(result) do
+              if not res.uri:match "%.h$" and not res.uri:match "%.hpp$" then
+                vim.lsp.util.jump_to_location(res)
+                return
+              end
+            end
+            -- fallback: jump to first result (likely header)
+            vim.lsp.util.jump_to_location(result[1])
+          end)
+        end, vim.tbl_extend("force", opts, { desc = "Go to function implementation (.cpp)" }))
+
+        break
+      end
+    end
+  end,
+})
+
 -- Load these only if nvim-dap is loaded
--- nvim-dap is attached only to particular buffer types, like .c
+--   nvim-dap is attached only to particular buffer types, like .c
 vim.api.nvim_create_autocmd("User", {
   pattern = "LazyLoad",
   callback = function(event)
