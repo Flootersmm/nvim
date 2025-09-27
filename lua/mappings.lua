@@ -16,7 +16,6 @@ map("v", "<", "<gv", { desc = "Unindent and keep selection" })
 
 -- Load these only if in a c/cpp file
 --   Jump to impl and jump to decl
--- C/C++ specific mappings for clangd
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "c", "cpp" },
   callback = function()
