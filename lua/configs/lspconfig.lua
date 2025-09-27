@@ -35,19 +35,6 @@ vim.lsp.config("clangd", {
       })
     end
   end,
-  caparoot_dir = function(params)
-    local fname = type(params) == "table" and params.bufname or params
-
-    local found = vim.fs.find({ "compile_commands.json", ".git" }, {
-      path = fname,
-      upward = true,
-    })[1]
-
-    if found then
-      return vim.fs.dirname(found)
-    else
-      return vim.loop.cwd()
-    end
-  end,
+  capabilities = nvlsp.capabilities,
 })
 vim.lsp.enable "clangd"
