@@ -5,12 +5,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     config = function()
-      local nvlsp = require "nvchad.configs.lspconfig"
-
-      vim.lsp.config("pyright", {
-        on_attach = nvlsp.on_attach,
-        capabilities = nvlsp.capabilities,
-      })
+      require "configs.lspconfig"
     end,
   },
 
@@ -89,11 +84,13 @@ return {
     config = function()
       require("java").setup {}
       local nvlsp = require "nvchad.configs.lspconfig"
-      vim.lsp.config.jdtls.setup {
+
+      vim.lsp.config("jdtls", {
         on_attach = nvlsp.on_attach,
         capabilities = nvlsp.capabilities,
         filetypes = { "java" },
-      }
+      })
+      vim.lsp.enable "jdtls"
     end,
   },
 

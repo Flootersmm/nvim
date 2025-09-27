@@ -62,3 +62,5 @@ vim.api.nvim_create_user_command("BannerComment", function(opts)
 end, {
   nargs = 1,
 })
+
+vim.g.lsp_autostart = true
