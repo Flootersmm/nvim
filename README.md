@@ -2,8 +2,8 @@
 - Typical motions for movement like `w`, `b`, `^`, `$`, etc.
 - `ciS`, where  S = { w, W, s, p, t, (, ), [, ], {, }, <, >, ', ", ` }`: Change in S
 - `diS`, where  S = { w, W, s, p, t, (, ), [, ], {, }, <, >, ', ", ` }`: Delete in S
-- `$v%`: Jump to matching bracket 
-- `gg`, `G`, `C-d`, `C-u`, `zt`, `zz`: Bottom, top, down half, up half, cursor to top, cursor to middle  
+- `$v%`: Jump to matching bracket, highlighting block 
+- `gg`, `G`, `C-d`, `C-u`, `zt`, `zz`: Top, bottom, down half, up half, cursor to top, cursor to middle  
 - `C-*`: Search forward for word on cursor
 - `C-o`, `C-i`: Previous jump, next jump 
 - `C-]`, `gD`: Declaration and again for definition, definition
