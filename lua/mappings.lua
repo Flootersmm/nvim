@@ -14,6 +14,25 @@ map("v", "p", '"_dP', { desc = "Paste without yanking replaced text" })
 map("v", ">", ">gv", { desc = "Indent and keep selection" })
 map("v", "<", "<gv", { desc = "Unindent and keep selection" })
 
+-- Load these only if in a rust file
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "rust",
+  callback = function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local opts = { silent = true, buffer = bufnr }
+
+    -- Hover with rust-analyzer actions
+    map("n", "K", function()
+      vim.cmd.RustLsp { "hover", "actions" }
+    end, opts)
+
+    -- Code actions with rust-analyzer grouping
+    map("n", "<leader>a", function()
+      vim.cmd.RustLsp "codeAction"
+    end, opts)
+  end,
+})
+
 -- Load these only if in a c/cpp file
 --   Jump to impl and jump to decl
 vim.api.nvim_create_autocmd("FileType", {

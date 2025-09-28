@@ -38,23 +38,78 @@ return {
     end,
   },
 
-  -- Rust (rust-tools wraps rust-analyzer)
+  -- Rust
   {
-    "simrat39/rust-tools.nvim",
-    ft = { "rust" },
-    dependencies = { "neovim/nvim-lspconfig", "nvim-lua/plenary.nvim" },
+    "mrcjkb/rustaceanvim",
+    version = "^6",
+    lazy = false,
+
     config = function()
-      local nvlsp = require "nvchad.configs.lspconfig"
-      require("rust-tools").setup {
+      vim.g.rustaceanvim = {
+        tools = {
+          hover_actions = {
+            auto_focus = true,
+          },
+          inlay_hints = {
+            auto = true,
+            only_current_line = false,
+            show_parameter_hints = true,
+            show_variable_name_hints = true,
+            max_len_align = false,
+            highlight = "Comment",
+          },
+        },
         server = {
           on_attach = function(client, bufnr)
-            nvlsp.on_attach(client, bufnr)
-            vim.keymap.set("n", "<Leader>rh", ":RustHoverActions<CR>", { buffer = bufnr, desc = "Rust Hover Actions" })
+            -- standard LSP mappings
+            local opts = { buffer = bufnr }
+            vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+            vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+            vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+            vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
           end,
-          capabilities = nvlsp.capabilities,
+          settings = {
+            ["rust-analyzer"] = {
+              check = {
+                command = "clippy",
+              },
+              diagnostics = {
+                enable = true,
+                experimental = { enable = true },
+              },
+              cargo = {
+                allFeatures = true,
+              },
+              inlayHints = {
+                lifetimeElisionHints = { enable = true, useParameterNames = true },
+                reborrowHints = { enable = true },
+              },
+              typing = {
+                -- Trigger analysis not just on save, but also as you type
+                autoClosingAngleBrackets = true,
+              },
+              completion = { postfix = { enable = true } }, -- enable postfix completions like `.unwrap()`
+            },
+          },
         },
-        tools = { autoSetHints = true },
+        flags = {
+          debounce_text_changes = 150, -- Can impact performance
+          allow_incremental_sync = true, -- incremental updates to reduce lag
+        },
       }
+    end,
+  },
+
+  -- Rust crates
+  {
+    "Saecki/crates.nvim",
+    version = "v0.3.0",
+    event = { "BufRead Cargo.toml" },
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("crates").setup()
+      -- Optional: integrate with LSP hover
+      require("crates").show()
     end,
   },
 
@@ -320,8 +375,14 @@ return {
   --   Better notifications from LSP etc.
   {
     "j-hui/fidget.nvim",
-    opts = {
-      -- options
-    },
+    event = "LspAttach",
+    config = function()
+      require("fidget").setup {
+        text = { spinner = "dots", done = "✔" },
+        align = { bottom = true, right = true },
+        timer = { spinner_rate = 125, fidget_decay = 2000, task_decay = 1000 },
+        notification = { window = { winblend = 0 } },
+      }
+    end,
   },
 }
