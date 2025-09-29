@@ -49,6 +49,11 @@ return {
         tools = {
           hover_actions = {
             auto_focus = true,
+            border = "rounded",
+            max_width = math.floor(vim.o.columns * 0.6),
+            max_height = math.floor(vim.o.lines * 0.4),
+            pad_top = 0,
+            pad_bottom = 0,
           },
           inlay_hints = {
             auto = true,
@@ -89,6 +94,7 @@ return {
                 autoClosingAngleBrackets = true,
               },
               completion = { postfix = { enable = true } }, -- enable postfix completions like `.unwrap()`
+              rustfmt = {},
             },
           },
         },
@@ -384,5 +390,16 @@ return {
         notification = { window = { winblend = 0 } },
       }
     end,
+  },
+
+  -- Mini.Operators
+  --   Additional motions like `gr` to replace from clipboard
+  {
+    "nvim-mini/mini.operators",
+    version = false,
+    config = function()
+      require("mini.operators").setup()
+    end,
+    keys = { "gr", "gR" },
   },
 }
