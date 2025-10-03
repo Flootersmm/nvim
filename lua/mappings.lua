@@ -10,9 +10,24 @@ map("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
 map("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
 map("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Apply code action (clangd fix)" })
 map("n", "<leader>st", "<cmd>TodoTelescope<cr>", { desc = "Search TODOs in Telescope" })
-map("v", "p", '"_dP', { desc = "Paste without yanking replaced text" })
+-- map("n", "p", '"0p', { desc = "Paste last yank (register 0)" })
+-- map("n", "P", '"0P', { desc = "Paste last yank (register 0) before cursor" })
 map("v", ">", ">gv", { desc = "Indent and keep selection" })
 map("v", "<", "<gv", { desc = "Unindent and keep selection" })
+map("n", "<leader>S", '<cmd>lua require("spectre").toggle()<CR>', { desc = "Toggle Spectre" })
+map(
+  "n",
+  "<leader>sw",
+  '<cmd>lua require("spectre").open_visual({select_word=true})<CR>',
+  { desc = "Search current word" }
+)
+map("v", "<leader>sw", '<esc><cmd>lua require("spectre").open_visual()<CR>', { desc = "Search current word" })
+map(
+  "n",
+  "<leader>sp",
+  '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>',
+  { desc = "Search on current file" }
+)
 
 -- Load these only if in a rust file
 vim.api.nvim_create_autocmd("FileType", {
