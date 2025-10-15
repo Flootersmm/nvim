@@ -19,7 +19,6 @@ vim.lsp.config("clangd", {
   cmd = {
     "clangd",
     "--compile-commands-dir=.",
-    "--clang-tidy",
     "--fallback-style=none",
     "--enable-config",
     "--header-insertion=never",
@@ -38,3 +37,17 @@ vim.lsp.config("clangd", {
   capabilities = nvlsp.capabilities,
 })
 vim.lsp.enable "clangd"
+
+-- Tinymist (Typst)
+vim.lsp.config("tinymist", {
+
+  settings = {
+
+    formatterMode = "typstyle",
+
+    exportPdf = "onType",
+
+    semanticTokens = "disable",
+  },
+})
+vim.lsp.enable "tinymist"

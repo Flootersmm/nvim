@@ -1,47 +1,47 @@
-local jdtls = require "jdtls"
-local nvlsp = require "nvchad.configs.lspconfig"
-
-local home = os.getenv "HOME"
-local workspace_dir = home .. "/.cache/jdtls/workspace/" .. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
-
-local root_files = { "pom.xml", "build.gradle", ".git", "mvnw", "gradlew" }
-
--- Arcane runes, do not touch
-local config = {
-  cmd = { "jdtls", "-data", workspace_dir },
-  root_dir = vim.lsp.util.root_pattern(unpack(root_files))(vim.fn.getcwd()) or vim.lsp.util.find_git_ancestor(
-    vim.fn.getcwd()
-  ) or vim.fn.getcwd(),
-  on_attach = function(client, bufnr)
-    nvlsp.on_attach(client, bufnr)
-    require("jdtls.setup").add_commands()
-  end,
-  capabilities = nvlsp.capabilities,
-  settings = {
-    java = {
-      configuration = {
-        runtimes = {
-          {
-            name = "JavaSE-21",
-            path = "/usr/lib/jvm/java-21-openjdk/",
-          },
-          {
-            name = "JavaSE-11",
-            path = "/usr/lib/jvm/java-11-openjdk",
-          },
-        },
-      },
-    },
-  },
-  init_options = {
-    bundles = {},
-  },
-}
-
-return {
-  setup = function()
-    if vim.bo.filetype == "java" then
-      jdtls.start_or_attach(config)
-    end
-  end,
-}
+-- local jdtls = require "jdtls"
+-- local nvlsp = require "nvchad.configs.lspconfig"
+--
+-- local home = os.getenv "HOME"
+-- local workspace_dir = home .. "/.cache/jdtls/workspace/" .. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
+--
+-- local root_files = { "pom.xml", "build.gradle", ".git", "mvnw", "gradlew" }
+--
+-- -- Arcane runes, do not touch
+-- local config = {
+--   cmd = { "jdtls", "-data", workspace_dir },
+--   root_dir = vim.lsp.util.root_pattern(unpack(root_files))(vim.fn.getcwd()) or vim.lsp.util.find_git_ancestor(
+--     vim.fn.getcwd()
+--   ) or vim.fn.getcwd(),
+--   on_attach = function(client, bufnr)
+--     nvlsp.on_attach(client, bufnr)
+--     require("jdtls.setup").add_commands()
+--   end,
+--   capabilities = nvlsp.capabilities,
+--   settings = {
+--     java = {
+--       configuration = {
+--         runtimes = {
+--           {
+--             name = "JavaSE-21",
+--             path = "/usr/lib/jvm/java-21-openjdk/",
+--           },
+--           {
+--             name = "JavaSE-11",
+--             path = "/usr/lib/jvm/java-11-openjdk",
+--           },
+--         },
+--       },
+--     },
+--   },
+--   init_options = {
+--     bundles = {},
+--   },
+-- }
+--
+-- return {
+--   setup = function()
+--     if vim.bo.filetype == "java" then
+--       jdtls.start_or_attach(config)
+--     end
+--   end,
+-- }

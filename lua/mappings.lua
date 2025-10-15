@@ -28,6 +28,8 @@ map(
   '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>',
   { desc = "Search on current file" }
 )
+map("x", "<leader>re", ":Refactor extract ", { desc = "Refactor extract" })
+map("x", "<leader>rf", ":Refactor extract_to_file ", { desc = "Refactor extract to file" })
 
 -- Load these only if in a rust file
 vim.api.nvim_create_autocmd("FileType", {

@@ -125,33 +125,48 @@ return {
     "nvim-java/nvim-java",
     ft = { "java" },
     dependencies = {
+      "neovim/nvim-lspconfig",
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+      "mfussenegger/nvim-dap",
       "nvim-java/lua-async-await",
       "nvim-java/nvim-java-core",
       "nvim-java/nvim-java-test",
       "nvim-java/nvim-java-dap",
-      "MunifTanjim/nui.nvim",
-      "neovim/nvim-lspconfig",
-      "mfussenegger/nvim-dap",
-      {
-        "williamboman/mason.nvim",
-        opts = {
-          registries = {
-            "github:nvim-java/mason-registry",
-            "github:mason-org/mason-registry",
-          },
-        },
-      },
     },
     config = function()
-      require("java").setup {}
-      local nvlsp = require "nvchad.configs.lspconfig"
+      -- Setup nvim-java core
+      require("java").setup {
+        jdtls = {
+          progressStatus = false, -- disable "project updated" spam
+        },
+      }
 
-      vim.lsp.config("jdtls", {
-        on_attach = nvlsp.on_attach,
-        capabilities = nvlsp.capabilities,
-        filetypes = { "java" },
-      })
-      vim.lsp.enable "jdtls"
+      -- LSP capabilities for nvim-cmp completion
+      local lspconfig = require "lspconfig"
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      local ok, cmp = pcall(require, "cmp_nvim_lsp")
+      if ok then
+        capabilities = cmp.default_capabilities(capabilities)
+      end
+
+      -- Setup jdtls with silent handlers
+      lspconfig.jdtls.setup {
+        capabilities = capabilities,
+        settings = {
+          java = {
+            autobuild = { enabled = false },
+            configuration = { updateBuildConfiguration = "disabled" },
+          },
+        },
+        handlers = {
+          -- Silence noisy JDT LS messages
+          ["language/status"] = function() end,
+          ["$/progress"] = function() end,
+          ["window/logMessage"] = function() end,
+          ["window/showMessage"] = function() end,
+        },
+      }
     end,
   },
 
@@ -339,6 +354,9 @@ return {
   {
     "OXY2DEV/markview.nvim",
     event = "VeryLazy",
+    opts = {
+      typst = { enable = false },
+    },
   },
 
   -- Todo-comments
@@ -447,5 +465,57 @@ return {
         desc = "Quickfix List (Trouble)",
       },
     },
+  },
+
+  -- Jupynium
+  --   Jupyter notebook support
+  {
+    "kiyoon/jupynium.nvim",
+    build = "python3 -m pip install .",
+    config = function()
+      require("jupynium").setup()
+    end,
+  },
+
+  -- Refactoring
+  --   Pull out functions, vars, inline functions
+  {
+    "ThePrimeagen/refactoring.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    lazy = false,
+    opts = {},
+    config = function()
+      require("refactoring").setup {
+        -- prompt for return type
+        prompt_func_return_type = {
+          go = true,
+          cpp = true,
+          c = true,
+          java = true,
+        },
+        -- prompt for function parameters
+        prompt_func_param_type = {
+          go = true,
+          cpp = true,
+          c = true,
+          java = true,
+        },
+      }
+    end,
+  },
+
+  -- Typst-preview
+  --   Instant preview for Typst
+  {
+    "chomosuke/typst-preview.nvim",
+    ft = "typst",
+    config = function()
+      require("typst-preview").setup {
+        debug = true, -- enable logging for troubleshooting
+      }
+    end,
   },
 }
