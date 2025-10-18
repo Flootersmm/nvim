@@ -137,6 +137,7 @@ return {
     config = function()
       -- Setup nvim-java core
       require("java").setup {
+        spring_boot_tools = { enable = false },
         jdtls = {
           progressStatus = false, -- disable "project updated" spam
         },
