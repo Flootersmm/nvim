@@ -9,6 +9,19 @@ return {
     end,
   },
 
+  -- CMake
+  {
+    "Civitasv/cmake-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    lazy = false,
+    config = function()
+      require("cmake-tools").setup {
+        build_dir = "build",
+        cmake_generator = "Ninja",
+      }
+    end,
+  },
+
   -- Scala / Metals
   {
     "scalameta/nvim-metals",
