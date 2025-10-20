@@ -532,4 +532,14 @@ return {
       }
     end,
   },
+
+  -- Stay-Centered
+  --   Applies `zz` after any vertical movement
+  {
+    "arnamak/stay-centered.nvim",
+    lazy = false,
+    opts = {
+      enabled = false, -- enable with keybind, see mappings.lua
+    },
+  },
 }
