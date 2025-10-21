@@ -528,7 +528,8 @@ return {
     ft = "typst",
     config = function()
       require("typst-preview").setup {
-        debug = true, -- enable logging for troubleshooting
+        debug = true,
+        open_cmd = "firefox %s",
       }
     end,
   },
