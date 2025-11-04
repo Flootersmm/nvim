@@ -31,6 +31,7 @@ map(
 map("x", "<leader>re", ":Refactor extract ", { desc = "Refactor extract" })
 map("x", "<leader>rf", ":Refactor extract_to_file ", { desc = "Refactor extract to file" })
 map({ "n", "v" }, "<leader>st", require("stay-centered").toggle, { desc = "Toggle stay-centered.nvim" })
+map("n", "<leader>gb", "<cmd>GitBlameToggle<cr>", { desc = "Toggle git blame" })
 
 -- Load these only if in a rust file
 vim.api.nvim_create_autocmd("FileType", {

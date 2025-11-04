@@ -22,6 +22,7 @@ vim.lsp.config("clangd", {
     "--fallback-style=none",
     "--enable-config",
     "--header-insertion=never",
+    "--completion-style=detailed",
   },
   on_attach = function(client, bufnr)
     nvlsp.on_attach(client, bufnr)

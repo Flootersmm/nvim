@@ -51,6 +51,17 @@ vim.schedule(function()
   require "mappings"
 end)
 
+-- Fish
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "fish",
+  callback = function()
+    vim.lsp.start {
+      name = "fish-lsp",
+      cmd = { "fish-lsp", "start" },
+    }
+  end,
+})
+
 -- Makes a `width` wide C-style comment
 vim.api.nvim_create_user_command("BannerComment", function(opts)
   local text = opts.args
